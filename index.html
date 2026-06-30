@@ -85,17 +85,46 @@
     }
 
     .product-surface {
-      background: linear-gradient(155deg, #1a1a1a 0%, #121212 45%, #0e0e0e 100%);
       position: relative;
+      overflow: hidden;
+      background: #121212;
+    }
+
+    .product-surface img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-surface__shade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8, 8, 8, 0.94) 0%, rgba(8, 8, 8, 0.42) 42%, rgba(8, 8, 8, 0.12) 100%);
+      pointer-events: none;
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
       overflow: hidden;
     }
 
-    .product-surface::after {
-      content: '';
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.22;
+      transform: scale(1.04);
+    }
+
+    .hero-media__shade {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 70% 50% at 30% 20%, rgba(217, 210, 196, 0.06) 0%, transparent 70%);
-      pointer-events: none;
+      background: linear-gradient(to top, #080808 0%, rgba(8, 8, 8, 0.88) 38%, rgba(8, 8, 8, 0.72) 100%);
     }
 
     .sheet-overlay {
@@ -192,7 +221,11 @@
   </header>
 
   <main>
-    <section id="hero" class="min-h-[100dvh] flex flex-col justify-end px-5 pt-28 pb-16 max-w-lg mx-auto" aria-labelledby="hero-title">
+    <section id="hero" class="relative min-h-[100dvh] flex flex-col justify-end px-5 pt-28 pb-16 max-w-lg mx-auto" aria-labelledby="hero-title">
+      <div class="hero-media" aria-hidden="true">
+        <img src="images/hero.jpg" alt="" width="1200" height="1600" fetchpriority="high" decoding="async">
+        <div class="hero-media__shade"></div>
+      </div>
       <p class="text-platinum-dim text-[11px] tracking-[0.2em] uppercase mb-6">Дроп 01&nbsp;/ SS26</p>
       <h1 id="hero-title" class="brand-word text-[clamp(3.25rem,14vw,5.5rem)] text-champagne-glow lowercase mb-8">kuzoself</h1>
       <p class="text-platinum text-[15px] leading-relaxed font-light max-w-[28ch] mb-10">
@@ -210,8 +243,10 @@
       </header>
 
       <div class="bento" role="list">
-        <article class="bento-item--hero product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900">
+        <article class="bento-item--hero product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900" data-image="images/tee.jpg">
           <div class="product-surface aspect-[4/3] flex items-end p-5">
+            <img src="images/tee.jpg" alt="Оверсайз футболка kuzoself" width="900" height="675" loading="lazy" decoding="async">
+            <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full flex justify-between items-end gap-4">
               <div>
                 <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">01</p>
@@ -226,8 +261,10 @@
           </div>
         </article>
 
-        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500">
+        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500" data-image="images/hoodie.jpg">
           <div class="product-surface aspect-[3/4] flex items-end p-5">
+            <img src="images/hoodie.jpg" alt="Объёмное худи kuzoself" width="700" height="933" loading="lazy" decoding="async">
+            <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full">
               <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">02</p>
               <h3 class="text-champagne text-sm font-light mb-1">Объёмное худи</h3>
@@ -239,8 +276,10 @@
           </div>
         </article>
 
-        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800">
+        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800" data-image="images/pants.jpg">
           <div class="product-surface aspect-[3/4] flex items-end p-5">
+            <img src="images/pants.jpg" alt="Свободные штаны kuzoself" width="700" height="933" loading="lazy" decoding="async">
+            <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full">
               <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">03</p>
               <h3 class="text-champagne text-sm font-light mb-1">Свободные штаны</h3>
@@ -320,6 +359,11 @@
       'use strict';
 
       const cart = [];
+      const productImages = {
+        tee: 'images/tee.jpg',
+        hoodie: 'images/hoodie.jpg',
+        pants: 'images/pants.jpg',
+      };
       const $ = (sel) => document.querySelector(sel);
       const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -375,6 +419,7 @@
 
         els.items.innerHTML = cart.map((item) => `
           <div class="flex items-center gap-3 py-3 border-b border-white/[0.05]" role="listitem" data-cart-id="${item.id}">
+            <img src="${productImages[item.id]}" alt="" width="48" height="48" loading="lazy" decoding="async" class="w-12 h-12 rounded-squircle object-cover shrink-0 bg-graphite">
             <div class="flex-1 min-w-0">
               <p class="text-champagne text-sm font-light truncate">${item.name}</p>
               <p class="text-platinum-dim text-xs font-light mt-0.5">${formatPrice(item.price)}</p>
@@ -395,7 +440,7 @@
         if (existing) {
           existing.qty += 1;
         } else {
-          cart.push({ id, name, price, qty: 1 });
+          cart.push({ id, name, price, qty: 1, image: productImages[id] });
         }
         renderCart();
         updateBadge(true);
