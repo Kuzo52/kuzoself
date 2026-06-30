@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="kuzoself — лимитированный дроп одежды. Три вещи, один тираж, без&nbsp;повторов.">
+  <meta name="theme-color" content="#080808">
+  <title>kuzoself — лимитированный дроп</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+          colors: {
+            onyx: { DEFAULT: '#080808', soft: '#0e0e0e', deep: '#050505' },
+            graphite: { DEFAULT: '#1a1a1a', light: '#242424', matte: '#2a2a2a' },
+            asphalt: { DEFAULT: '#333333', wet: '#3d3d3d' },
+            champagne: { DEFAULT: '#d9d2c4', muted: '#b8b0a0', glow: '#ece6da' },
+            platinum: { DEFAULT: '#c8c4bc', dim: '#9a9690' },
+          },
+          borderRadius: { squircle: '12px', 'squircle-lg': '20px', 'squircle-xl': '24px' },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      --ease-sheet: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-snappy: cubic-bezier(0.25, 1, 0.5, 1);
+      --safe-t: env(safe-area-inset-top, 0px);
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-l: env(safe-area-inset-left, 0px);
+      --safe-r: env(safe-area-inset-right, 0px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      overflow-x: hidden;
+      background: #080808;
+      color: #ece6da;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding-left: var(--safe-l);
+      padding-right: var(--safe-r);
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .glass-champagne {
+      background: rgba(217, 210, 196, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(217, 210, 196, 0.1);
+    }
+
+    .tap {
+      transition: transform 0.18s var(--ease-snappy);
+      will-change: transform;
+    }
+    .tap:active { transform: scale(0.96); }
+
+    .brand-word {
+      font-weight: 300;
+      letter-spacing: 0.38em;
+      text-indent: 0.38em;
+      line-height: 0.95;
+    }
+
+    .product-surface {
+      background: linear-gradient(155deg, #1a1a1a 0%, #121212 45%, #0e0e0e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-surface::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 30% 20%, rgba(217, 210, 196, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .sheet-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: rgba(5, 5, 5, 0.55);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s var(--ease-sheet), visibility 0.45s var(--ease-sheet);
+    }
+    .sheet-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      max-height: min(88vh, 640px);
+      border-radius: 24px 24px 0 0;
+      transform: translateY(100%);
+      transition: transform 0.5s var(--ease-sheet);
+      padding-bottom: calc(1.25rem + var(--safe-b));
+      touch-action: none;
+    }
+    .sheet.is-open { transform: translateY(0); }
+    .sheet.is-dragging { transition: none; }
+
+    .sheet-handle {
+      width: 36px;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(217, 210, 196, 0.25);
+      margin: 0 auto 1.25rem;
+    }
+
+    .badge-bounce {
+      animation: badgePop 0.45s var(--ease-sheet);
+    }
+    @keyframes badgePop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+
+    .btn-checkout:disabled {
+      opacity: 0.35;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    .bento {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 390px) {
+      .bento {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+      }
+      .bento-item--hero {
+        grid-column: 1 / -1;
+      }
+      .bento-item--tall {
+        grid-row: span 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .tap:active { transform: none; }
+      .sheet, .sheet-overlay { transition: none; }
+      .badge-bounce { animation: none; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <header class="fixed top-0 left-0 right-0 z-50 glass" style="padding-top: var(--safe-t)">
+    <div class="flex items-center justify-between px-5 py-3 max-w-lg mx-auto">
+      <a href="#hero" class="tap text-champagne-muted text-xs font-medium tracking-[0.25em] uppercase min-h-[44px] min-w-[44px] flex items-center" aria-label="На&nbsp;главную">kuzoself</a>
+      <button type="button" id="cart-toggle" class="tap relative min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle glass-champagne" aria-label="Открыть корзину" aria-expanded="false" aria-controls="cart-sheet">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-champagne" aria-hidden="true">
+          <path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6l-1.5-3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>
+        </svg>
+        <span id="cart-badge" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-champagne text-onyx text-[10px] font-medium leading-none hidden" aria-hidden="true">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" class="min-h-[100dvh] flex flex-col justify-end px-5 pt-28 pb-16 max-w-lg mx-auto" aria-labelledby="hero-title">
+      <p class="text-platinum-dim text-[11px] tracking-[0.2em] uppercase mb-6">Дроп 01&nbsp;/ SS26</p>
+      <h1 id="hero-title" class="brand-word text-[clamp(3.25rem,14vw,5.5rem)] text-champagne-glow lowercase mb-8">kuzoself</h1>
+      <p class="text-platinum text-[15px] leading-relaxed font-light max-w-[28ch] mb-10">
+        Три вещи. Один тираж. Без&nbsp;повторов&nbsp;— только то, что останется в&nbsp;гардеробе надолго.
+      </p>
+      <a href="#drop" class="tap inline-flex items-center justify-center self-start min-h-[44px] px-7 rounded-squircle glass-champagne text-champagne text-sm font-medium tracking-wide">
+        Смотреть дроп
+      </a>
+    </section>
+
+    <section id="drop" class="px-5 pb-20 max-w-lg mx-auto" aria-labelledby="drop-title">
+      <header class="mb-8">
+        <h2 id="drop-title" class="text-champagne text-lg font-light tracking-wide mb-2">Коллекция</h2>
+        <p class="text-platinum-dim text-sm font-light">Лимитированный выпуск&nbsp;— каждая позиция в&nbsp;единичном тираже.</p>
+      </header>
+
+      <div class="bento" role="list">
+        <article class="bento-item--hero product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900">
+          <div class="product-surface aspect-[4/3] flex items-end p-5">
+            <div class="relative z-10 w-full flex justify-between items-end gap-4">
+              <div>
+                <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">01</p>
+                <h3 class="text-champagne text-base font-light">Оверсайз футболка</h3>
+              </div>
+              <p class="text-champagne-muted text-sm font-light whitespace-nowrap">3&nbsp;900&nbsp;₽</p>
+            </div>
+          </div>
+          <div class="px-5 py-4 flex items-center justify-between border-t border-white/[0.05]">
+            <p class="text-platinum-dim text-xs font-light">240&nbsp;г&nbsp;/ м², объёмный крой</p>
+            <button type="button" class="add-btn tap min-h-[44px] min-w-[44px] px-4 rounded-squircle bg-graphite-light text-champagne text-xs font-medium tracking-wide" aria-label="Добавить оверсайз футболку в&nbsp;корзину">В&nbsp;корзину</button>
+          </div>
+        </article>
+
+        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500">
+          <div class="product-surface aspect-[3/4] flex items-end p-5">
+            <div class="relative z-10 w-full">
+              <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">02</p>
+              <h3 class="text-champagne text-sm font-light mb-1">Объёмное худи</h3>
+              <p class="text-champagne-muted text-sm font-light">7&nbsp;500&nbsp;₽</p>
+            </div>
+          </div>
+          <div class="px-5 py-3 border-t border-white/[0.05]">
+            <button type="button" class="add-btn tap w-full min-h-[44px] rounded-squircle bg-graphite-light text-champagne text-xs font-medium tracking-wide" aria-label="Добавить объёмное худи в&nbsp;корзину">В&nbsp;корзину</button>
+          </div>
+        </article>
+
+        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800">
+          <div class="product-surface aspect-[3/4] flex items-end p-5">
+            <div class="relative z-10 w-full">
+              <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">03</p>
+              <h3 class="text-champagne text-sm font-light mb-1">Свободные штаны</h3>
+              <p class="text-champagne-muted text-sm font-light">5&nbsp;800&nbsp;₽</p>
+            </div>
+          </div>
+          <div class="px-5 py-3 border-t border-white/[0.05]">
+            <button type="button" class="add-btn tap w-full min-h-[44px] rounded-squircle bg-graphite-light text-champagne text-xs font-medium tracking-wide" aria-label="Добавить свободные штаны в&nbsp;корзину">В&nbsp;корзину</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/[0.05] px-5 py-12 max-w-lg mx-auto" style="padding-bottom: calc(3rem + var(--safe-b))">
+    <div class="grid gap-8">
+      <div>
+        <p class="brand-word text-2xl text-champagne-muted lowercase mb-3">kuzoself</p>
+        <p class="text-platinum-dim text-sm font-light leading-relaxed">Вопросы по&nbsp;заказу&nbsp;— напрямую. Отвечаем в&nbsp;течение суток.</p>
+      </div>
+      <address class="not-italic flex flex-col gap-3">
+        <a href="https://t.me/kuzoself" class="tap inline-flex items-center min-h-[44px] text-champagne text-sm font-light gap-3" rel="noopener noreferrer" target="_blank">
+          <span class="w-9 h-9 rounded-squircle glass-champagne flex items-center justify-center shrink-0" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+          </span>
+          Telegram
+        </a>
+        <a href="mailto:hello@kuzoself.ru" class="tap inline-flex items-center min-h-[44px] text-champagne text-sm font-light gap-3">
+          <span class="w-9 h-9 rounded-squircle glass-champagne flex items-center justify-center shrink-0" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </span>
+          hello@kuzoself.ru
+        </a>
+      </address>
+      <div class="flex items-center justify-between pt-4 border-t border-white/[0.05]">
+        <p class="text-platinum-dim text-xs font-light">©&nbsp;2026 kuzoself</p>
+        <button type="button" id="back-to-top" class="tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle glass-champagne text-champagne text-xs font-medium tracking-wide px-4" aria-label="Наверх">
+          Наверх
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <div id="sheet-overlay" class="sheet-overlay" aria-hidden="true"></div>
+
+  <aside id="cart-sheet" class="sheet glass" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+    <div id="sheet-drag" class="pt-3 px-5">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="flex items-center justify-between mb-6">
+        <h2 id="cart-title" class="text-champagne text-lg font-light">Корзина</h2>
+        <button type="button" id="cart-close" class="tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle text-platinum-dim" aria-label="Закрыть корзину">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="cart-items" class="px-5 overflow-y-auto max-h-[40vh] space-y-3" role="list"></div>
+
+    <div id="cart-empty" class="px-5 py-10 text-center">
+      <p class="text-platinum-dim text-sm font-light">Корзина пуста</p>
+      <p class="text-platinum-dim/60 text-xs font-light mt-1">Добавьте вещи из&nbsp;дропа</p>
+    </div>
+
+    <div class="px-5 pt-6 mt-auto border-t border-white/[0.05]">
+      <div class="flex items-center justify-between mb-5">
+        <span class="text-platinum-dim text-sm font-light">Итого</span>
+        <span id="cart-total" class="text-champagne text-lg font-light">0&nbsp;₽</span>
+      </div>
+      <button type="button" id="checkout-btn" class="btn-checkout tap w-full min-h-[52px] rounded-squircle bg-champagne text-onyx text-sm font-medium tracking-wide" disabled>
+        Оформить заказ
+      </button>
+    </div>
+  </aside>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const cart = [];
+      const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => document.querySelectorAll(sel);
+
+      const els = {
+        badge: $('#cart-badge'),
+        toggle: $('#cart-toggle'),
+        close: $('#cart-close'),
+        overlay: $('#sheet-overlay'),
+        sheet: $('#cart-sheet'),
+        drag: $('#sheet-drag'),
+        items: $('#cart-items'),
+        empty: $('#cart-empty'),
+        total: $('#cart-total'),
+        checkout: $('#checkout-btn'),
+        backToTop: $('#back-to-top'),
+      };
+
+      const formatPrice = (n) => n.toLocaleString('ru-RU') + '\u00a0₽';
+
+      function findItem(id) {
+        return cart.find((i) => i.id === id);
+      }
+
+      function cartCount() {
+        return cart.reduce((s, i) => s + i.qty, 0);
+      }
+
+      function cartSum() {
+        return cart.reduce((s, i) => s + i.price * i.qty, 0);
+      }
+
+      function updateBadge(bounce) {
+        const count = cartCount();
+        if (count > 0) {
+          els.badge.textContent = count;
+          els.badge.classList.remove('hidden');
+          if (bounce) {
+            els.badge.classList.remove('badge-bounce');
+            void els.badge.offsetWidth;
+            els.badge.classList.add('badge-bounce');
+          }
+        } else {
+          els.badge.classList.add('hidden');
+        }
+      }
+
+      function renderCart() {
+        const hasItems = cart.length > 0;
+        els.empty.classList.toggle('hidden', hasItems);
+        els.items.classList.toggle('hidden', !hasItems);
+        els.checkout.disabled = !hasItems;
+        els.total.textContent = formatPrice(cartSum());
+
+        els.items.innerHTML = cart.map((item) => `
+          <div class="flex items-center gap-3 py-3 border-b border-white/[0.05]" role="listitem" data-cart-id="${item.id}">
+            <div class="flex-1 min-w-0">
+              <p class="text-champagne text-sm font-light truncate">${item.name}</p>
+              <p class="text-platinum-dim text-xs font-light mt-0.5">${formatPrice(item.price)}</p>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" class="qty-btn tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle glass-champagne text-champagne text-base" data-action="dec" data-id="${item.id}" aria-label="Уменьшить количество">−</button>
+              <span class="min-w-[28px] text-center text-champagne text-sm font-light" aria-live="polite">${item.qty}</span>
+              <button type="button" class="qty-btn tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle glass-champagne text-champagne text-base" data-action="inc" data-id="${item.id}" aria-label="Увеличить количество">+</button>
+            </div>
+          </div>
+        `).join('');
+
+        updateBadge(false);
+      }
+
+      function addToCart(id, name, price) {
+        const existing = findItem(id);
+        if (existing) {
+          existing.qty += 1;
+        } else {
+          cart.push({ id, name, price, qty: 1 });
+        }
+        renderCart();
+        updateBadge(true);
+        openSheet();
+      }
+
+      function changeQty(id, delta) {
+        const item = findItem(id);
+        if (!item) return;
+        item.qty += delta;
+        if (item.qty <= 0) {
+          const idx = cart.indexOf(item);
+          cart.splice(idx, 1);
+        }
+        renderCart();
+      }
+
+      let sheetOpen = false;
+
+      function openSheet() {
+        sheetOpen = true;
+        els.sheet.classList.add('is-open');
+        els.overlay.classList.add('is-open');
+        els.sheet.setAttribute('aria-hidden', 'false');
+        els.overlay.setAttribute('aria-hidden', 'false');
+        els.toggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSheet() {
+        sheetOpen = false;
+        els.sheet.classList.remove('is-open', 'is-dragging');
+        els.overlay.classList.remove('is-open');
+        els.sheet.style.transform = '';
+        els.sheet.setAttribute('aria-hidden', 'true');
+        els.overlay.setAttribute('aria-hidden', 'true');
+        els.toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      $$('.product-card').forEach((card) => {
+        card.addEventListener('click', () => {
+          addToCart(card.dataset.id, card.dataset.name, Number(card.dataset.price));
+        });
+      });
+
+      els.items.addEventListener('click', (e) => {
+        const btn = e.target.closest('.qty-btn');
+        if (!btn) return;
+        const delta = btn.dataset.action === 'inc' ? 1 : -1;
+        changeQty(btn.dataset.id, delta);
+      });
+
+      els.toggle.addEventListener('click', () => {
+        sheetOpen ? closeSheet() : openSheet();
+      });
+      els.close.addEventListener('click', closeSheet);
+      els.overlay.addEventListener('click', closeSheet);
+
+      els.checkout.addEventListener('click', () => {
+        if (cart.length === 0) return;
+        const lines = cart.map((i) => `${i.name} × ${i.qty}`).join(', ');
+        window.location.href = `mailto:hello@kuzoself.ru?subject=${encodeURIComponent('Заказ kuzoself')}&body=${encodeURIComponent('Здравствуйте!\n\nХочу оформить заказ:\n' + lines + '\n\nИтого: ' + cartSum().toLocaleString('ru-RU') + ' ₽')}`;
+      });
+
+      els.backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sheetOpen) closeSheet();
+      });
+
+      let startY = 0;
+      let currentY = 0;
+      let dragging = false;
+
+      function onTouchStart(e) {
+        if (!sheetOpen) return;
+        startY = e.touches[0].clientY;
+        currentY = 0;
+        dragging = true;
+        els.sheet.classList.add('is-dragging');
+      }
+
+      function onTouchMove(e) {
+        if (!dragging) return;
+        const dy = e.touches[0].clientY - startY;
+        if (dy < 0) return;
+        currentY = dy;
+        els.sheet.style.transform = `translateY(${dy}px)`;
+      }
+
+      function onTouchEnd() {
+        if (!dragging) return;
+        dragging = false;
+        els.sheet.classList.remove('is-dragging');
+        if (currentY > 100) {
+          closeSheet();
+        } else {
+          els.sheet.style.transform = '';
+        }
+      }
+
+      els.drag.addEventListener('touchstart', onTouchStart, { passive: true });
+      els.sheet.addEventListener('touchmove', onTouchMove, { passive: true });
+      els.sheet.addEventListener('touchend', onTouchEnd);
+
+      renderCart();
+    })();
+  </script>
+</body>
+</html>
