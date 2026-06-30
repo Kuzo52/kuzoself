@@ -80,9 +80,10 @@
 
     .brand-word {
       font-weight: 300;
-      letter-spacing: 0.38em;
-      text-indent: 0.38em;
+      letter-spacing: clamp(0.16em, 2.8vw, 0.34em);
+      text-indent: 0;
       line-height: 0.95;
+      white-space: nowrap;
     }
 
     .product-surface {
@@ -225,7 +226,7 @@
         <div class="hero-media__shade"></div>
       </div>
       <p class="text-platinum-dim text-[11px] tracking-[0.2em] uppercase mb-5">Drop 01&nbsp;— SS26</p>
-      <h1 id="hero-title" class="brand-word text-[clamp(3.5rem,15vw,5.8rem)] text-champagne-glow lowercase mb-8">kuzoself</h1>
+      <h1 id="hero-title" class="brand-word text-[clamp(2.45rem,11.8vw,5.4rem)] text-champagne-glow lowercase mb-8">kuzoself</h1>
       <p class="text-platinum text-[15px] leading-relaxed font-light max-w-[30ch] mb-10">
         Чистый силуэт, плотные ткани и&nbsp;тираж, который не&nbsp;повторится.
       </p>
@@ -241,9 +242,9 @@
       </header>
 
       <div class="bento" role="list">
-        <article class="bento-item--hero product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900" data-image="images/tee.svg">
+        <article class="bento-item--hero product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900" data-image="images/tee.jpg">
           <div class="product-surface aspect-[4/3] flex items-end p-5">
-            <img src="images/tee.svg" alt="Оверсайз футболка kuzoself" width="900" height="675" loading="lazy" decoding="async">
+            <img src="images/tee.jpg" alt="Оверсайз футболка kuzoself" width="900" height="675" loading="lazy" decoding="async">
             <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full flex justify-between items-end gap-4">
               <div>
@@ -259,9 +260,9 @@
           </div>
         </article>
 
-        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500" data-image="images/hoodie.svg">
+        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500" data-image="images/hoodie.jpg">
           <div class="product-surface aspect-[3/4] flex items-end p-5">
-            <img src="images/hoodie.svg" alt="Объёмное худи kuzoself" width="700" height="933" loading="lazy" decoding="async">
+            <img src="images/hoodie.jpg" alt="Объёмное худи kuzoself" width="700" height="933" loading="lazy" decoding="async">
             <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full">
               <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">02</p>
@@ -274,9 +275,9 @@
           </div>
         </article>
 
-        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800" data-image="images/pants.svg">
+        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800" data-image="images/pants.jpg">
           <div class="product-surface aspect-[3/4] flex items-end p-5">
-            <img src="images/pants.svg" alt="Свободные штаны kuzoself" width="700" height="933" loading="lazy" decoding="async">
+            <img src="images/pants.jpg" alt="Свободные штаны kuzoself" width="700" height="933" loading="lazy" decoding="async">
             <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full">
               <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">03</p>
@@ -358,9 +359,9 @@
 
       const cart = [];
       const productImages = {
-        tee: 'images/tee.svg',
-        hoodie: 'images/hoodie.svg',
-        pants: 'images/pants.svg',
+        tee: 'images/tee.jpg',
+        hoodie: 'images/hoodie.jpg',
+        pants: 'images/pants.jpg',
       };
       const $ = (sel) => document.querySelector(sel);
       const $$ = (sel) => document.querySelectorAll(sel);
