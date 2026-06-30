@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="kuzoself — лимитированный дроп одежды. Три вещи, один тираж, без&nbsp;повторов.">
+  <meta name="description" content="kuzoself — лимитированный дроп одежды. Мобильный бутик с&nbsp;физикой iOS и&nbsp;чистой типографикой.">
   <meta name="theme-color" content="#080808">
   <title>kuzoself — лимитированный дроп</title>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -49,7 +49,7 @@
 
     body {
       overflow-x: hidden;
-      background: #080808;
+      background: radial-gradient(circle at 82% -10%, rgba(217, 210, 196, 0.12), transparent 45%), #080808;
       color: #ece6da;
       font-family: Inter, system-ui, -apple-system, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -58,10 +58,11 @@
     }
 
     .glass {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.025);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.42);
     }
 
     .glass-champagne {
@@ -117,14 +118,14 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.22;
+      opacity: 0.16;
       transform: scale(1.04);
     }
 
     .hero-media__shade {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, #080808 0%, rgba(8, 8, 8, 0.88) 38%, rgba(8, 8, 8, 0.72) 100%);
+      background: linear-gradient(to top, #080808 0%, rgba(8, 8, 8, 0.9) 38%, rgba(8, 8, 8, 0.64) 100%);
     }
 
     .sheet-overlay {
@@ -186,15 +187,12 @@
       grid-template-columns: 1fr;
     }
     @media (min-width: 390px) {
-      .bento {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto auto;
-      }
+      .bento { grid-template-columns: 1.18fr 0.82fr; }
       .bento-item--hero {
         grid-column: 1 / -1;
       }
       .bento-item--tall {
-        grid-row: span 1;
+        grid-row: span 2;
       }
     }
 
@@ -221,15 +219,15 @@
   </header>
 
   <main>
-    <section id="hero" class="relative min-h-[100dvh] flex flex-col justify-end px-5 pt-28 pb-16 max-w-lg mx-auto" aria-labelledby="hero-title">
+    <section id="hero" class="relative min-h-[100dvh] flex flex-col justify-end px-5 pt-28 pb-14 max-w-lg mx-auto" aria-labelledby="hero-title">
       <div class="hero-media" aria-hidden="true">
-        <img src="images/hero.jpg" alt="" width="1200" height="1600" fetchpriority="high" decoding="async">
+        <img src="images/hero.svg" alt="" width="1200" height="1600" fetchpriority="high" decoding="async">
         <div class="hero-media__shade"></div>
       </div>
-      <p class="text-platinum-dim text-[11px] tracking-[0.2em] uppercase mb-6">Дроп 01&nbsp;/ SS26</p>
-      <h1 id="hero-title" class="brand-word text-[clamp(3.25rem,14vw,5.5rem)] text-champagne-glow lowercase mb-8">kuzoself</h1>
-      <p class="text-platinum text-[15px] leading-relaxed font-light max-w-[28ch] mb-10">
-        Три вещи. Один тираж. Без&nbsp;повторов&nbsp;— только то, что останется в&nbsp;гардеробе надолго.
+      <p class="text-platinum-dim text-[11px] tracking-[0.2em] uppercase mb-5">Drop 01&nbsp;— SS26</p>
+      <h1 id="hero-title" class="brand-word text-[clamp(3.5rem,15vw,5.8rem)] text-champagne-glow lowercase mb-8">kuzoself</h1>
+      <p class="text-platinum text-[15px] leading-relaxed font-light max-w-[30ch] mb-10">
+        Чистый силуэт, плотные ткани и&nbsp;тираж, который не&nbsp;повторится.
       </p>
       <a href="#drop" class="tap inline-flex items-center justify-center self-start min-h-[44px] px-7 rounded-squircle glass-champagne text-champagne text-sm font-medium tracking-wide">
         Смотреть дроп
@@ -238,14 +236,14 @@
 
     <section id="drop" class="px-5 pb-20 max-w-lg mx-auto" aria-labelledby="drop-title">
       <header class="mb-8">
-        <h2 id="drop-title" class="text-champagne text-lg font-light tracking-wide mb-2">Коллекция</h2>
-        <p class="text-platinum-dim text-sm font-light">Лимитированный выпуск&nbsp;— каждая позиция в&nbsp;единичном тираже.</p>
+        <h2 id="drop-title" class="text-champagne text-lg font-light tracking-wide mb-2">Лимитированный дроп</h2>
+        <p class="text-platinum-dim text-sm font-light">Три позиции, три настроения, одна логика посадки.</p>
       </header>
 
       <div class="bento" role="list">
-        <article class="bento-item--hero product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900" data-image="images/tee.jpg">
+        <article class="bento-item--hero product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900" data-image="images/tee.svg">
           <div class="product-surface aspect-[4/3] flex items-end p-5">
-            <img src="images/tee.jpg" alt="Оверсайз футболка kuzoself" width="900" height="675" loading="lazy" decoding="async">
+            <img src="images/tee.svg" alt="Оверсайз футболка kuzoself" width="900" height="675" loading="lazy" decoding="async">
             <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full flex justify-between items-end gap-4">
               <div>
@@ -256,14 +254,14 @@
             </div>
           </div>
           <div class="px-5 py-4 flex items-center justify-between border-t border-white/[0.05]">
-            <p class="text-platinum-dim text-xs font-light">240&nbsp;г&nbsp;/ м², объёмный крой</p>
+            <p class="text-platinum-dim text-xs font-light">240&nbsp;г&nbsp;/ м², сухой хлопок</p>
             <button type="button" class="add-btn tap min-h-[44px] min-w-[44px] px-4 rounded-squircle bg-graphite-light text-champagne text-xs font-medium tracking-wide" aria-label="Добавить оверсайз футболку в&nbsp;корзину">В&nbsp;корзину</button>
           </div>
         </article>
 
-        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500" data-image="images/hoodie.jpg">
+        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500" data-image="images/hoodie.svg">
           <div class="product-surface aspect-[3/4] flex items-end p-5">
-            <img src="images/hoodie.jpg" alt="Объёмное худи kuzoself" width="700" height="933" loading="lazy" decoding="async">
+            <img src="images/hoodie.svg" alt="Объёмное худи kuzoself" width="700" height="933" loading="lazy" decoding="async">
             <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full">
               <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">02</p>
@@ -276,9 +274,9 @@
           </div>
         </article>
 
-        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800" data-image="images/pants.jpg">
+        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800" data-image="images/pants.svg">
           <div class="product-surface aspect-[3/4] flex items-end p-5">
-            <img src="images/pants.jpg" alt="Свободные штаны kuzoself" width="700" height="933" loading="lazy" decoding="async">
+            <img src="images/pants.svg" alt="Свободные штаны kuzoself" width="700" height="933" loading="lazy" decoding="async">
             <div class="product-surface__shade" aria-hidden="true"></div>
             <div class="relative z-10 w-full">
               <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">03</p>
@@ -360,9 +358,9 @@
 
       const cart = [];
       const productImages = {
-        tee: 'images/tee.jpg',
-        hoodie: 'images/hoodie.jpg',
-        pants: 'images/pants.jpg',
+        tee: 'images/tee.svg',
+        hoodie: 'images/hoodie.svg',
+        pants: 'images/pants.svg',
       };
       const $ = (sel) => document.querySelector(sel);
       const $$ = (sel) => document.querySelectorAll(sel);
