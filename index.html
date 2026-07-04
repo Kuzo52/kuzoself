@@ -3,28 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="kuzoself — лимитированный дроп одежды. Мобильный бутик с&nbsp;физикой iOS и&nbsp;чистой типографикой.">
-  <meta name="theme-color" content="#080808">
+  <meta name="description" content="kuzoself — лимитированный дроп одежды. Три вещи, один тираж, без&nbsp;повторов.">
+  <meta name="theme-color" content="#0a0a0a">
   <title>kuzoself — лимитированный дроп</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-          },
+          fontFamily: { sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'] },
           colors: {
-            onyx: { DEFAULT: '#080808', soft: '#0e0e0e', deep: '#050505' },
-            graphite: { DEFAULT: '#1a1a1a', light: '#242424', matte: '#2a2a2a' },
-            asphalt: { DEFAULT: '#333333', wet: '#3d3d3d' },
-            champagne: { DEFAULT: '#d9d2c4', muted: '#b8b0a0', glow: '#ece6da' },
-            platinum: { DEFAULT: '#c8c4bc', dim: '#9a9690' },
+            onyx: { DEFAULT: '#0a0a0a', soft: '#111', deep: '#060606' },
+            graphite: { DEFAULT: '#1a1a1a', light: '#222', warm: '#252320' },
+            stone: { DEFAULT: '#2c2c2c', mid: '#383838', pale: '#444' },
+            cream: { DEFAULT: '#e8e2d6', muted: '#c4bba9', dim: '#9e9585', glow: '#f2ede4' },
           },
-          borderRadius: { squircle: '12px', 'squircle-lg': '20px', 'squircle-xl': '24px' },
+          borderRadius: { ios: '14px', 'ios-lg': '22px', 'ios-xl': '28px' },
         },
       },
     };
@@ -33,13 +30,14 @@
     :root {
       --ease-sheet: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-snappy: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-fluid: cubic-bezier(0.4, 0, 0.2, 1);
       --safe-t: env(safe-area-inset-top, 0px);
       --safe-b: env(safe-area-inset-bottom, 0px);
       --safe-l: env(safe-area-inset-left, 0px);
       --safe-r: env(safe-area-inset-right, 0px);
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
 
     html {
       overflow-x: hidden;
@@ -49,8 +47,8 @@
 
     body {
       overflow-x: hidden;
-      background: radial-gradient(circle at 82% -10%, rgba(217, 210, 196, 0.12), transparent 45%), #080808;
-      color: #ece6da;
+      background: #0a0a0a;
+      color: #e8e2d6;
       font-family: Inter, system-ui, -apple-system, sans-serif;
       -webkit-font-smoothing: antialiased;
       padding-left: var(--safe-l);
@@ -58,143 +56,100 @@
     }
 
     .glass {
-      background: rgba(255, 255, 255, 0.025);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.42);
-    }
-
-    .glass-champagne {
-      background: rgba(217, 210, 196, 0.04);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(217, 210, 196, 0.1);
+      background: rgba(255, 255, 255, 0.035);
+      backdrop-filter: blur(24px) saturate(1.2);
+      -webkit-backdrop-filter: blur(24px) saturate(1.2);
+      border: 1px solid rgba(255, 255, 255, 0.07);
     }
 
     .tap {
-      transition: transform 0.18s var(--ease-snappy);
-      will-change: transform;
+      transition: transform 0.16s var(--ease-snappy);
+      cursor: pointer;
     }
     .tap:active { transform: scale(0.96); }
 
-    .brand-word {
+    .brand {
       font-weight: 300;
-      letter-spacing: clamp(0.16em, 2.8vw, 0.34em);
-      text-indent: 0;
-      line-height: 0.95;
-      white-space: nowrap;
+      letter-spacing: clamp(0.18em, 3vw, 0.36em);
+      line-height: 1;
     }
 
-    .product-surface {
-      position: relative;
-      overflow: hidden;
-      background: #121212;
+    /* ---------- Hero ---------- */
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0; overflow: hidden;
+    }
+    .hero-bg img {
+      width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.2; transform: scale(1.06);
+      filter: saturate(0.6);
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, #0a0a0a 0%, rgba(10,10,10,0.92) 30%, rgba(10,10,10,0.6) 100%);
     }
 
-    .product-surface img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    /* ---------- Product card ---------- */
+    .card-img {
+      position: relative; overflow: hidden;
+      background: #141414;
     }
-
-    .product-surface__shade {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(8, 8, 8, 0.94) 0%, rgba(8, 8, 8, 0.42) 42%, rgba(8, 8, 8, 0.12) 100%);
+    .card-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s var(--ease-fluid);
+    }
+    .product-card:hover .card-img img,
+    .product-card:active .card-img img {
+      transform: scale(1.04);
+    }
+    .card-img::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.15) 55%, transparent 100%);
       pointer-events: none;
     }
 
-    .hero-media {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    .hero-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.16;
-      transform: scale(1.04);
-    }
-
-    .hero-media__shade {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, #080808 0%, rgba(8, 8, 8, 0.9) 38%, rgba(8, 8, 8, 0.64) 100%);
-    }
-
+    /* ---------- Bottom Sheet ---------- */
     .sheet-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 90;
-      background: rgba(5, 5, 5, 0.55);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.45s var(--ease-sheet), visibility 0.45s var(--ease-sheet);
+      position: fixed; inset: 0; z-index: 90;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.4s var(--ease-sheet), visibility 0.4s var(--ease-sheet);
     }
-    .sheet-overlay.is-open {
-      opacity: 1;
-      visibility: visible;
-    }
+    .sheet-overlay.is-open { opacity: 1; visibility: visible; }
 
     .sheet {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 100;
-      max-height: min(88vh, 640px);
-      border-radius: 24px 24px 0 0;
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 100;
+      max-height: min(88dvh, 640px);
+      border-radius: 22px 22px 0 0;
       transform: translateY(100%);
       transition: transform 0.5s var(--ease-sheet);
       padding-bottom: calc(1.25rem + var(--safe-b));
       touch-action: none;
+      background: rgba(18, 18, 18, 0.92);
+      backdrop-filter: blur(40px) saturate(1.4);
+      -webkit-backdrop-filter: blur(40px) saturate(1.4);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-bottom: none;
     }
     .sheet.is-open { transform: translateY(0); }
     .sheet.is-dragging { transition: none; }
 
     .sheet-handle {
-      width: 36px;
-      height: 5px;
-      border-radius: 3px;
-      background: rgba(217, 210, 196, 0.25);
+      width: 36px; height: 5px; border-radius: 3px;
+      background: rgba(255, 255, 255, 0.18);
       margin: 0 auto 1.25rem;
     }
 
-    .badge-bounce {
-      animation: badgePop 0.45s var(--ease-sheet);
-    }
+    .badge-bounce { animation: badgePop 0.4s var(--ease-sheet); }
     @keyframes badgePop {
       0% { transform: scale(1); }
-      40% { transform: scale(1.35); }
+      35% { transform: scale(1.4); }
       100% { transform: scale(1); }
     }
 
     .btn-checkout:disabled {
-      opacity: 0.35;
-      pointer-events: none;
-      cursor: not-allowed;
-    }
-
-    .bento {
-      display: grid;
-      gap: 0.75rem;
-      grid-template-columns: 1fr;
-    }
-    @media (min-width: 390px) {
-      .bento { grid-template-columns: 1.18fr 0.82fr; }
-      .bento-item--hero {
-        grid-column: 1 / -1;
-      }
-      .bento-item--tall {
-        grid-row: span 2;
-      }
+      opacity: 0.3; pointer-events: none; cursor: not-allowed;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -202,154 +157,155 @@
       .tap:active { transform: none; }
       .sheet, .sheet-overlay { transition: none; }
       .badge-bounce { animation: none; }
+      .card-img img { transition: none; }
     }
   </style>
 </head>
 <body class="min-h-screen">
 
+  <!-- ============ HEADER ============ -->
   <header class="fixed top-0 left-0 right-0 z-50 glass" style="padding-top: var(--safe-t)">
-    <div class="flex items-center justify-between px-5 py-3 max-w-lg mx-auto">
-      <a href="#hero" class="tap text-champagne-muted text-xs font-medium tracking-[0.25em] uppercase min-h-[44px] min-w-[44px] flex items-center" aria-label="На&nbsp;главную">kuzoself</a>
-      <button type="button" id="cart-toggle" class="tap relative min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle glass-champagne" aria-label="Открыть корзину" aria-expanded="false" aria-controls="cart-sheet">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-champagne" aria-hidden="true">
-          <path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6l-1.5-3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>
+    <div class="flex items-center justify-between px-5 py-3 max-w-xl mx-auto">
+      <a href="#hero" class="tap text-cream-dim text-[11px] font-medium tracking-[0.28em] uppercase min-h-[44px] flex items-center" aria-label="На&nbsp;главную">kuzoself</a>
+      <button type="button" id="cart-toggle" class="tap relative min-h-[44px] min-w-[44px] flex items-center justify-center rounded-ios glass" aria-label="Открыть корзину" aria-expanded="false" aria-controls="cart-sheet">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-cream" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
         </svg>
-        <span id="cart-badge" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-champagne text-onyx text-[10px] font-medium leading-none hidden" aria-hidden="true">0</span>
+        <span id="cart-badge" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-cream text-onyx text-[10px] font-semibold leading-none hidden" aria-hidden="true">0</span>
       </button>
     </div>
   </header>
 
   <main>
-    <section id="hero" class="relative min-h-[100dvh] flex flex-col justify-end px-5 pt-28 pb-14 max-w-lg mx-auto" aria-labelledby="hero-title">
-      <div class="hero-media" aria-hidden="true">
-        <img src="images/hero.svg" alt="" width="1200" height="1600" fetchpriority="high" decoding="async">
-        <div class="hero-media__shade"></div>
+    <!-- ============ HERO ============ -->
+    <section id="hero" class="relative min-h-[100dvh] flex flex-col justify-end px-5 pt-28 pb-12 max-w-xl mx-auto" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true">
+        <img src="images/hero.jpg" alt="" width="1024" height="682" fetchpriority="high" decoding="async">
       </div>
-      <p class="text-platinum-dim text-[11px] tracking-[0.2em] uppercase mb-5">Drop 01&nbsp;— SS26</p>
-      <h1 id="hero-title" class="brand-word text-[clamp(2.45rem,11.8vw,5.4rem)] text-champagne-glow lowercase mb-8">kuzoself</h1>
-      <p class="text-platinum text-[15px] leading-relaxed font-light max-w-[30ch] mb-10">
-        Чистый силуэт, плотные ткани и&nbsp;тираж, который не&nbsp;повторится.
-      </p>
-      <a href="#drop" class="tap inline-flex items-center justify-center self-start min-h-[44px] px-7 rounded-squircle glass-champagne text-champagne text-sm font-medium tracking-wide">
-        Смотреть дроп
-      </a>
+      <div class="relative z-10">
+        <p class="text-cream-dim text-[10px] tracking-[0.22em] uppercase font-medium mb-6">Drop 01&nbsp;— SS26</p>
+        <h1 id="hero-title" class="brand text-[clamp(2.6rem,12vw,5.2rem)] text-cream-glow lowercase mb-6">kuzoself</h1>
+        <p class="text-cream-muted text-[15px] leading-[1.65] font-light max-w-[32ch] mb-10">
+          Чистый силуэт, плотные ткани и&nbsp;тираж, который не&nbsp;повторится. Три вещи&nbsp;— одна философия.
+        </p>
+        <a href="#drop" class="tap inline-flex items-center justify-center min-h-[48px] px-8 rounded-ios bg-cream/[0.08] border border-cream/[0.12] text-cream text-[13px] font-medium tracking-wide">
+          Смотреть дроп
+        </a>
+      </div>
     </section>
 
-    <section id="drop" class="px-5 pb-20 max-w-lg mx-auto" aria-labelledby="drop-title">
-      <header class="mb-8">
-        <h2 id="drop-title" class="text-champagne text-lg font-light tracking-wide mb-2">Лимитированный дроп</h2>
-        <p class="text-platinum-dim text-sm font-light">Три позиции, три настроения, одна логика посадки.</p>
+    <!-- ============ PRODUCT GRID ============ -->
+    <section id="drop" class="px-5 pb-24 max-w-xl mx-auto" aria-labelledby="drop-title">
+      <header class="mb-10">
+        <h2 id="drop-title" class="text-cream text-xl font-light tracking-wide mb-2">Лимитированный дроп</h2>
+        <p class="text-cream-dim text-[13px] font-light leading-relaxed">Три позиции, три настроения, одна логика посадки.</p>
       </header>
 
-      <div class="bento" role="list">
-        <article class="bento-item--hero product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900" data-image="images/tee.jpg">
-          <div class="product-surface aspect-[4/3] flex items-end p-5">
-            <img src="images/tee.jpg" alt="Оверсайз футболка kuzoself" width="900" height="675" loading="lazy" decoding="async">
-            <div class="product-surface__shade" aria-hidden="true"></div>
-            <div class="relative z-10 w-full flex justify-between items-end gap-4">
-              <div>
-                <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">01</p>
-                <h3 class="text-champagne text-base font-light">Оверсайз футболка</h3>
-              </div>
-              <p class="text-champagne-muted text-sm font-light whitespace-nowrap">3&nbsp;900&nbsp;₽</p>
-            </div>
+      <div class="grid gap-4" role="list">
+
+        <!-- TEE — full-width hero card -->
+        <article class="product-card tap rounded-ios-xl overflow-hidden" role="listitem" data-id="tee" data-name="Оверсайз футболка" data-price="3900">
+          <div class="card-img aspect-[4/5]">
+            <img src="images/tee.jpg" alt="Оверсайз футболка kuzoself" width="720" height="900" loading="lazy" decoding="async">
           </div>
-          <div class="px-5 py-4 flex items-center justify-between border-t border-white/[0.05]">
-            <p class="text-platinum-dim text-xs font-light">240&nbsp;г&nbsp;/ м², сухой хлопок</p>
-            <button type="button" class="add-btn tap min-h-[44px] min-w-[44px] px-4 rounded-squircle bg-graphite-light text-champagne text-xs font-medium tracking-wide" aria-label="Добавить оверсайз футболку в&nbsp;корзину">В&nbsp;корзину</button>
+          <div class="relative z-10 -mt-24 px-5 pb-5">
+            <p class="text-cream-dim text-[10px] tracking-[0.18em] uppercase font-medium mb-1.5">01</p>
+            <h3 class="text-cream text-lg font-light mb-1">Оверсайз футболка</h3>
+            <p class="text-cream-dim text-sm font-light mb-4">240&nbsp;г/м², сухой хлопок</p>
+            <div class="flex items-center justify-between gap-4">
+              <span class="text-cream text-lg font-light">3&nbsp;900&nbsp;₽</span>
+              <button type="button" class="add-btn tap min-h-[44px] px-6 rounded-ios bg-cream/[0.1] border border-cream/[0.12] text-cream text-[13px] font-medium tracking-wide" aria-label="Добавить оверсайз футболку в&nbsp;корзину">В&nbsp;корзину</button>
+            </div>
           </div>
         </article>
 
-        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500" data-image="images/hoodie.jpg">
-          <div class="product-surface aspect-[3/4] flex items-end p-5">
-            <img src="images/hoodie.jpg" alt="Объёмное худи kuzoself" width="700" height="933" loading="lazy" decoding="async">
-            <div class="product-surface__shade" aria-hidden="true"></div>
-            <div class="relative z-10 w-full">
-              <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">02</p>
-              <h3 class="text-champagne text-sm font-light mb-1">Объёмное худи</h3>
-              <p class="text-champagne-muted text-sm font-light">7&nbsp;500&nbsp;₽</p>
+        <!-- HOODIE + PANTS — side by side on ≥ 390px -->
+        <div class="grid grid-cols-1 min-[390px]:grid-cols-2 gap-4">
+          <article class="product-card tap rounded-ios-xl overflow-hidden" role="listitem" data-id="hoodie" data-name="Объёмное худи" data-price="7500">
+            <div class="card-img aspect-[3/4]">
+              <img src="images/hoodie.jpg" alt="Объёмное худи kuzoself" width="540" height="720" loading="lazy" decoding="async">
             </div>
-          </div>
-          <div class="px-5 py-3 border-t border-white/[0.05]">
-            <button type="button" class="add-btn tap w-full min-h-[44px] rounded-squircle bg-graphite-light text-champagne text-xs font-medium tracking-wide" aria-label="Добавить объёмное худи в&nbsp;корзину">В&nbsp;корзину</button>
-          </div>
-        </article>
+            <div class="relative z-10 -mt-28 px-4 pb-4">
+              <p class="text-cream-dim text-[10px] tracking-[0.18em] uppercase font-medium mb-1">02</p>
+              <h3 class="text-cream text-[15px] font-light mb-0.5">Объёмное худи</h3>
+              <p class="text-cream text-sm font-light mb-3">7&nbsp;500&nbsp;₽</p>
+              <button type="button" class="add-btn tap w-full min-h-[44px] rounded-ios bg-cream/[0.1] border border-cream/[0.12] text-cream text-[13px] font-medium tracking-wide" aria-label="Добавить объёмное худи в&nbsp;корзину">В&nbsp;корзину</button>
+            </div>
+          </article>
 
-        <article class="bento-item--tall product-card tap glass rounded-squircle-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800" data-image="images/pants.jpg">
-          <div class="product-surface aspect-[3/4] flex items-end p-5">
-            <img src="images/pants.jpg" alt="Свободные штаны kuzoself" width="700" height="933" loading="lazy" decoding="async">
-            <div class="product-surface__shade" aria-hidden="true"></div>
-            <div class="relative z-10 w-full">
-              <p class="text-platinum-dim text-[10px] tracking-[0.18em] uppercase mb-1">03</p>
-              <h3 class="text-champagne text-sm font-light mb-1">Свободные штаны</h3>
-              <p class="text-champagne-muted text-sm font-light">5&nbsp;800&nbsp;₽</p>
+          <article class="product-card tap rounded-ios-xl overflow-hidden" role="listitem" data-id="pants" data-name="Свободные штаны" data-price="5800">
+            <div class="card-img aspect-[3/4]">
+              <img src="images/pants.jpg" alt="Свободные штаны kuzoself" width="540" height="720" loading="lazy" decoding="async">
             </div>
-          </div>
-          <div class="px-5 py-3 border-t border-white/[0.05]">
-            <button type="button" class="add-btn tap w-full min-h-[44px] rounded-squircle bg-graphite-light text-champagne text-xs font-medium tracking-wide" aria-label="Добавить свободные штаны в&nbsp;корзину">В&nbsp;корзину</button>
-          </div>
-        </article>
+            <div class="relative z-10 -mt-28 px-4 pb-4">
+              <p class="text-cream-dim text-[10px] tracking-[0.18em] uppercase font-medium mb-1">03</p>
+              <h3 class="text-cream text-[15px] font-light mb-0.5">Свободные штаны</h3>
+              <p class="text-cream text-sm font-light mb-3">5&nbsp;800&nbsp;₽</p>
+              <button type="button" class="add-btn tap w-full min-h-[44px] rounded-ios bg-cream/[0.1] border border-cream/[0.12] text-cream text-[13px] font-medium tracking-wide" aria-label="Добавить свободные штаны в&nbsp;корзину">В&nbsp;корзину</button>
+            </div>
+          </article>
+        </div>
+
       </div>
     </section>
   </main>
 
-  <footer class="border-t border-white/[0.05] px-5 py-12 max-w-lg mx-auto" style="padding-bottom: calc(3rem + var(--safe-b))">
-    <div class="grid gap-8">
+  <!-- ============ FOOTER ============ -->
+  <footer class="border-t border-white/[0.05] px-5 py-14 max-w-xl mx-auto" style="padding-bottom: calc(3.5rem + var(--safe-b))">
+    <div class="grid gap-10">
       <div>
-        <p class="brand-word text-2xl text-champagne-muted lowercase mb-3">kuzoself</p>
-        <p class="text-platinum-dim text-sm font-light leading-relaxed">Вопросы по&nbsp;заказу&nbsp;— напрямую. Отвечаем в&nbsp;течение суток.</p>
+        <p class="brand text-2xl text-cream-muted lowercase mb-3">kuzoself</p>
+        <p class="text-cream-dim text-sm font-light leading-relaxed">Вопросы по&nbsp;заказу&nbsp;— напрямую.<br>Отвечаем в&nbsp;течение суток.</p>
       </div>
       <address class="not-italic flex flex-col gap-3">
-        <a href="https://t.me/kuzoself" class="tap inline-flex items-center min-h-[44px] text-champagne text-sm font-light gap-3" rel="noopener noreferrer" target="_blank">
-          <span class="w-9 h-9 rounded-squircle glass-champagne flex items-center justify-center shrink-0" aria-hidden="true">
+        <a href="https://t.me/kuzoself" class="tap inline-flex items-center min-h-[44px] text-cream text-sm font-light gap-3" rel="noopener noreferrer" target="_blank">
+          <span class="w-10 h-10 rounded-ios bg-cream/[0.06] border border-cream/[0.1] flex items-center justify-center shrink-0" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
           </span>
           Telegram
         </a>
-        <a href="mailto:hello@kuzoself.ru" class="tap inline-flex items-center min-h-[44px] text-champagne text-sm font-light gap-3">
-          <span class="w-9 h-9 rounded-squircle glass-champagne flex items-center justify-center shrink-0" aria-hidden="true">
+        <a href="mailto:hello@kuzoself.ru" class="tap inline-flex items-center min-h-[44px] text-cream text-sm font-light gap-3">
+          <span class="w-10 h-10 rounded-ios bg-cream/[0.06] border border-cream/[0.1] flex items-center justify-center shrink-0" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           </span>
           hello@kuzoself.ru
         </a>
       </address>
-      <div class="flex items-center justify-between pt-4 border-t border-white/[0.05]">
-        <p class="text-platinum-dim text-xs font-light">©&nbsp;2026 kuzoself</p>
-        <button type="button" id="back-to-top" class="tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle glass-champagne text-champagne text-xs font-medium tracking-wide px-4" aria-label="Наверх">
-          Наверх
-        </button>
+      <div class="flex items-center justify-between pt-5 border-t border-white/[0.05]">
+        <p class="text-cream-dim text-xs font-light">©&nbsp;2026 kuzoself</p>
+        <button type="button" id="back-to-top" class="tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-ios bg-cream/[0.06] border border-cream/[0.1] text-cream text-xs font-medium tracking-wide px-5" aria-label="Наверх">Наверх</button>
       </div>
     </div>
   </footer>
 
+  <!-- ============ SHEET OVERLAY ============ -->
   <div id="sheet-overlay" class="sheet-overlay" aria-hidden="true"></div>
 
-  <aside id="cart-sheet" class="sheet glass" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
+  <!-- ============ CART BOTTOM SHEET ============ -->
+  <aside id="cart-sheet" class="sheet" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true">
     <div id="sheet-drag" class="pt-3 px-5">
       <div class="sheet-handle" aria-hidden="true"></div>
       <div class="flex items-center justify-between mb-6">
-        <h2 id="cart-title" class="text-champagne text-lg font-light">Корзина</h2>
-        <button type="button" id="cart-close" class="tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle text-platinum-dim" aria-label="Закрыть корзину">
+        <h2 id="cart-title" class="text-cream text-lg font-light">Корзина</h2>
+        <button type="button" id="cart-close" class="tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-ios text-cream-dim" aria-label="Закрыть корзину">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
         </button>
       </div>
     </div>
 
-    <div id="cart-items" class="px-5 overflow-y-auto max-h-[40vh] space-y-3" role="list"></div>
+    <div id="cart-items" class="px-5 overflow-y-auto max-h-[40vh]" role="list"></div>
 
     <div id="cart-empty" class="px-5 py-10 text-center">
-      <p class="text-platinum-dim text-sm font-light">Корзина пуста</p>
-      <p class="text-platinum-dim/60 text-xs font-light mt-1">Добавьте вещи из&nbsp;дропа</p>
+      <p class="text-cream-dim text-sm font-light">Корзина пуста</p>
+      <p class="text-cream-dim/50 text-xs font-light mt-1">Добавьте вещи из&nbsp;дропа</p>
     </div>
 
     <div class="px-5 pt-6 mt-auto border-t border-white/[0.05]">
       <div class="flex items-center justify-between mb-5">
-        <span class="text-platinum-dim text-sm font-light">Итого</span>
-        <span id="cart-total" class="text-champagne text-lg font-light">0&nbsp;₽</span>
+        <span class="text-cream-dim text-sm font-light">Итого</span>
+        <span id="cart-total" class="text-cream text-xl font-light">0&nbsp;₽</span>
       </div>
-      <button type="button" id="checkout-btn" class="btn-checkout tap w-full min-h-[52px] rounded-squircle bg-champagne text-onyx text-sm font-medium tracking-wide" disabled>
-        Оформить заказ
-      </button>
+      <button type="button" id="checkout-btn" class="btn-checkout tap w-full min-h-[52px] rounded-ios bg-cream text-onyx text-sm font-semibold tracking-wide" disabled>Оформить заказ</button>
     </div>
   </aside>
 
@@ -381,18 +337,9 @@
       };
 
       const formatPrice = (n) => n.toLocaleString('ru-RU') + '\u00a0₽';
-
-      function findItem(id) {
-        return cart.find((i) => i.id === id);
-      }
-
-      function cartCount() {
-        return cart.reduce((s, i) => s + i.qty, 0);
-      }
-
-      function cartSum() {
-        return cart.reduce((s, i) => s + i.price * i.qty, 0);
-      }
+      const findItem = (id) => cart.find((i) => i.id === id);
+      const cartCount = () => cart.reduce((s, i) => s + i.qty, 0);
+      const cartSum = () => cart.reduce((s, i) => s + i.price * i.qty, 0);
 
       function updateBadge(bounce) {
         const count = cartCount();
@@ -417,16 +364,16 @@
         els.total.textContent = formatPrice(cartSum());
 
         els.items.innerHTML = cart.map((item) => `
-          <div class="flex items-center gap-3 py-3 border-b border-white/[0.05]" role="listitem" data-cart-id="${item.id}">
-            <img src="${productImages[item.id]}" alt="" width="48" height="48" loading="lazy" decoding="async" class="w-12 h-12 rounded-squircle object-cover shrink-0 bg-graphite">
+          <div class="flex items-center gap-3 py-3.5 border-b border-white/[0.05]" role="listitem" data-cart-id="${item.id}">
+            <img src="${productImages[item.id]}" alt="" width="56" height="56" loading="lazy" decoding="async" class="w-14 h-14 rounded-ios object-cover shrink-0 bg-graphite">
             <div class="flex-1 min-w-0">
-              <p class="text-champagne text-sm font-light truncate">${item.name}</p>
-              <p class="text-platinum-dim text-xs font-light mt-0.5">${formatPrice(item.price)}</p>
+              <p class="text-cream text-sm font-light truncate">${item.name}</p>
+              <p class="text-cream-dim text-xs font-light mt-0.5">${formatPrice(item.price)}</p>
             </div>
-            <div class="flex items-center gap-1 shrink-0">
-              <button type="button" class="qty-btn tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle glass-champagne text-champagne text-base" data-action="dec" data-id="${item.id}" aria-label="Уменьшить количество">−</button>
-              <span class="min-w-[28px] text-center text-champagne text-sm font-light" aria-live="polite">${item.qty}</span>
-              <button type="button" class="qty-btn tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-squircle glass-champagne text-champagne text-base" data-action="inc" data-id="${item.id}" aria-label="Увеличить количество">+</button>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" class="qty-btn tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-ios bg-cream/[0.06] border border-cream/[0.1] text-cream text-base" data-action="dec" data-id="${item.id}" aria-label="Уменьшить количество">−</button>
+              <span class="min-w-[28px] text-center text-cream text-sm font-light" aria-live="polite">${item.qty}</span>
+              <button type="button" class="qty-btn tap min-h-[44px] min-w-[44px] flex items-center justify-center rounded-ios bg-cream/[0.06] border border-cream/[0.1] text-cream text-base" data-action="inc" data-id="${item.id}" aria-label="Увеличить количество">+</button>
             </div>
           </div>
         `).join('');
@@ -436,11 +383,8 @@
 
       function addToCart(id, name, price) {
         const existing = findItem(id);
-        if (existing) {
-          existing.qty += 1;
-        } else {
-          cart.push({ id, name, price, qty: 1, image: productImages[id] });
-        }
+        if (existing) { existing.qty += 1; }
+        else { cart.push({ id, name, price, qty: 1 }); }
         renderCart();
         updateBadge(true);
         openSheet();
@@ -450,10 +394,7 @@
         const item = findItem(id);
         if (!item) return;
         item.qty += delta;
-        if (item.qty <= 0) {
-          const idx = cart.indexOf(item);
-          cart.splice(idx, 1);
-        }
+        if (item.qty <= 0) { cart.splice(cart.indexOf(item), 1); }
         renderCart();
       }
 
@@ -480,8 +421,10 @@
         document.body.style.overflow = '';
       }
 
-      $$('.product-card').forEach((card) => {
-        card.addEventListener('click', () => {
+      $$('.product-card .add-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const card = btn.closest('.product-card');
           addToCart(card.dataset.id, card.dataset.name, Number(card.dataset.price));
         });
       });
@@ -489,13 +432,10 @@
       els.items.addEventListener('click', (e) => {
         const btn = e.target.closest('.qty-btn');
         if (!btn) return;
-        const delta = btn.dataset.action === 'inc' ? 1 : -1;
-        changeQty(btn.dataset.id, delta);
+        changeQty(btn.dataset.id, btn.dataset.action === 'inc' ? 1 : -1);
       });
 
-      els.toggle.addEventListener('click', () => {
-        sheetOpen ? closeSheet() : openSheet();
-      });
+      els.toggle.addEventListener('click', () => { sheetOpen ? closeSheet() : openSheet(); });
       els.close.addEventListener('click', closeSheet);
       els.overlay.addEventListener('click', closeSheet);
 
@@ -505,17 +445,11 @@
         window.location.href = `mailto:hello@kuzoself.ru?subject=${encodeURIComponent('Заказ kuzoself')}&body=${encodeURIComponent('Здравствуйте!\n\nХочу оформить заказ:\n' + lines + '\n\nИтого: ' + cartSum().toLocaleString('ru-RU') + ' ₽')}`;
       });
 
-      els.backToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
+      els.backToTop.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && sheetOpen) closeSheet();
-      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && sheetOpen) closeSheet(); });
 
-      let startY = 0;
-      let currentY = 0;
-      let dragging = false;
+      let startY = 0, currentY = 0, dragging = false;
 
       function onTouchStart(e) {
         if (!sheetOpen) return;
@@ -524,7 +458,6 @@
         dragging = true;
         els.sheet.classList.add('is-dragging');
       }
-
       function onTouchMove(e) {
         if (!dragging) return;
         const dy = e.touches[0].clientY - startY;
@@ -532,16 +465,11 @@
         currentY = dy;
         els.sheet.style.transform = `translateY(${dy}px)`;
       }
-
       function onTouchEnd() {
         if (!dragging) return;
         dragging = false;
         els.sheet.classList.remove('is-dragging');
-        if (currentY > 100) {
-          closeSheet();
-        } else {
-          els.sheet.style.transform = '';
-        }
+        currentY > 100 ? closeSheet() : (els.sheet.style.transform = '');
       }
 
       els.drag.addEventListener('touchstart', onTouchStart, { passive: true });
